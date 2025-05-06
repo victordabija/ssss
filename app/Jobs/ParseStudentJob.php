@@ -37,8 +37,6 @@ class ParseStudentJob implements ShouldQueue
 
             $body = $response->getBody();
 
-            Str::replace('/assets', 'https://api.ceiti.md/assets', $body);
-
             $this->student->update([
                 'content' => $body
             ]);

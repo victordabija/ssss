@@ -24,15 +24,6 @@ services:
         depends_on:
             - mysql
 
-    laravel.queue:
-        build:
-            context: './docker/8.4'
-        depends_on:
-            - laravel.test
-        volumes:
-            - '.:/var/www/html'
-        entrypoint: [ "php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--timeout=60", "--env=production" ]
-
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:

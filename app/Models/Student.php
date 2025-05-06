@@ -13,6 +13,9 @@ class Student extends Model
 {
     protected $fillable = [
         'name',
+        'group',
+        'studyYear',
+        'speciality',
         'idnp',
         'content',
     ];
