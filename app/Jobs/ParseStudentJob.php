@@ -13,11 +13,12 @@ class ParseStudentJob implements ShouldQueue
 {
     use Queueable;
 
+
     /**
      * Create a new job instance.
      */
     public function __construct(
-        protected string $idnp,
+        protected Student $student,
     )
     {
         //
@@ -30,14 +31,15 @@ class ParseStudentJob implements ShouldQueue
     {
         try {
             $response = Http::asForm()->post('https://api.ceiti.md/date/login', [
-                'idnp' => $this->idnp,
+                'idnp' => $this->student->idnp,
             ]);
 
-            Student::idnp($this->idnp)->first()->update([
+            $this->student->update([
                 'content' => $response->getBody()
             ]);
         } catch (ConnectionException $e) {
-            Log::error("Error while parsing student $this->idnp. " . $e->getMessage());
+            Log::error("Error while parsing student $this->student->idnp. " . $e->getMessage());
+            $this->fail();
         }
     }
 }
