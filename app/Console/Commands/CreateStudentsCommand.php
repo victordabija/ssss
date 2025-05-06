@@ -8,12 +8,14 @@ use Illuminate\Support\Facades\File;
 
 class CreateStudentsCommand extends Command
 {
+
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:create-students-command';
+    protected $signature = 'app:create-students {file}';
 
     /**
      * The console command description.

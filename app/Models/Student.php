@@ -22,4 +22,9 @@ class Student extends Model
     {
         $query->where('idnp', $idnp);
     }
+
+    public function getKeyName()
+    {
+        return 'idnp';
+    }
 }

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ParseStudentJob implements ShouldQueue
 {
@@ -34,8 +35,12 @@ class ParseStudentJob implements ShouldQueue
                 'idnp' => $this->student->idnp,
             ]);
 
+            $body = $response->getBody();
+
+            Str::replace('/assets', 'https://api.ceiti.md/assets', $body);
+
             $this->student->update([
-                'content' => $response->getBody()
+                'content' => $body
             ]);
         } catch (ConnectionException $e) {
             Log::error("Error while parsing student $this->student->idnp. " . $e->getMessage());
