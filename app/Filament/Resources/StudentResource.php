@@ -84,11 +84,16 @@ class StudentResource extends Resource
                             ->select('group')
                             ->whereNotNull('speciality')
                             ->distinct()
-                            ->pluck('group', 'group') // associative array: ['value' => 'label']
+                            ->pluck('group', 'group')
                             ->toArray()
                     )
             ], layout: FiltersLayout::AboveContent)
             ->actions([
+                Tables\Actions\Action::make('viewDetails')
+                    ->label('View Content')
+                    ->icon('heroicon-o-document-text')
+                    ->url(fn($record) => route('students.show', $record))
+                    ->openUrlInNewTab(), // optional
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
