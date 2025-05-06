@@ -63,7 +63,7 @@ class StudentResource extends Resource
                     ->form([
                         TextInput::make('name')
                     ])
-                    ->query(fn($query, array $data) => $query->when($data['name'] ?? null, fn($q, $name) => $q->where('name', 'like', '%' . $name . '%'))),
+                    ->query(fn($query, array $data) => $query->when($data['name'] ?? '', fn($q, $name) => $q->where('name', 'like', '%' . $name . '%'))),
                 SelectFilter::make('studyYear')
                     ->options([1 => 1, 2 => 2, 3 => 3, 4 => 4]),
                 SelectFilter::make('speciality')
@@ -71,6 +71,7 @@ class StudentResource extends Resource
                     ->options(
                         Student::query()
                             ->select('speciality')
+                            ->whereNotNull('speciality')
                             ->distinct()
                             ->pluck('speciality', 'speciality') // associative array: ['value' => 'label']
                             ->toArray()
@@ -81,6 +82,7 @@ class StudentResource extends Resource
                     ->options(
                         Student::query()
                             ->select('group')
+                            ->whereNotNull('speciality')
                             ->distinct()
                             ->pluck('group', 'group') // associative array: ['value' => 'label']
                             ->toArray()
