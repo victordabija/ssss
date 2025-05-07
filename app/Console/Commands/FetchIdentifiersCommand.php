@@ -45,7 +45,7 @@ class FetchIdentifiersCommand extends Command
 
             $count++;
 
-            $student = new Student(['idnp' => $identifier]);
+            $student = Student::create(['idnp' => $identifier]);
 
             dispatch(new ProcessStudentContentJob($student));
 
