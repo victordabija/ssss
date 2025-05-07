@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @method static Builder idnp(string $idnp)
+ * @method static bool idnpExists(string $idnp)
  */
 class Student extends Model
 {
@@ -24,6 +25,12 @@ class Student extends Model
     protected function idnp(Builder $query, string $idnp)
     {
         $query->where('idnp', $idnp);
+    }
+
+    #[Scope]
+    protected function idnpExists(Builder $query, string $idnp)
+    {
+        $query->where('idnp', $idnp)->exists();
     }
 
     public function getKeyName()
