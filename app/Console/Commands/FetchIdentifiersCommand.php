@@ -35,7 +35,8 @@ class FetchIdentifiersCommand extends Command
         try {
             $identifiers = $parserService->fetchIdentifiers($url);
         } catch (ConnectionException $e) {
-            $this->fail($e);
+            $this->error($e);
+            $this->fail();
         }
 
         $count = 0;
