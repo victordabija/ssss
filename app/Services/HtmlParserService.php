@@ -84,6 +84,7 @@ class HtmlParserService
     public function getStudentContent(string $idnp): string
     {
         return $this->getRequest()
+            ->asForm()
             ->post(config('services.parser.student'), [
                 'idnp' => $idnp,
             ])->getBody();
