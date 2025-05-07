@@ -33,7 +33,7 @@ class ProcessNewStudentsCommand extends Command
         $this->info("Found $count new students.");;
 
         Student::query()->whereNull('content')->get()->each(function (Student $student) {
-            dispatch(new ParseStudentJob($student));
+            dispatch(new ParseStudentJob($student->id));
             $this->info("Dispatched job for student $student->id.");
         });
     }

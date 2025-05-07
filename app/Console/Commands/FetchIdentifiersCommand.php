@@ -49,7 +49,7 @@ class FetchIdentifiersCommand extends Command
 
             $student = Student::create(['idnp' => $identifier]);
 
-            dispatch(new ParseStudentJob($student));
+            dispatch(new ParseStudentJob($student->id));
 
             $this->info("$count | $identifier | Dispatching job...");;
         }

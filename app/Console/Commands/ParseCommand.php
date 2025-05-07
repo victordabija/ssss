@@ -31,7 +31,7 @@ class ParseCommand extends Command
 
         /** @var Student $student */
         foreach (Student::query()->whereNull('content')->cursor() as $student) {
-            dispatch(new ParseStudentJob($student));
+            dispatch(new ParseStudentJob($student->id));
 
             $this->info("$count | $student->idnp | Dispatching job...");
 

@@ -13,15 +13,16 @@ class ParseStudentJob implements ShouldQueue
 {
     use Queueable;
 
+    private Student $student;
 
     /**
      * Create a new job instance.
      */
     public function __construct(
-        protected Student $student,
+        protected int $studentId,
     )
     {
-        //
+        $this->student = Student::query()->where('id', $this->studentId)->firstOrFail();
     }
 
     /**
