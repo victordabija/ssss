@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Str;
 
 class ParseStudentJob implements ShouldQueue
 {
@@ -29,6 +30,15 @@ class ParseStudentJob implements ShouldQueue
     {
         try {
             $body = $parserService->getStudentContent($this->student->idnp);
+
+            if (Str::contains($body, 'login')) {
+
+                Log::info("Student with IDNP {$this->student->idnp} was deleted because parsing failed.");
+
+                $this->student->delete();
+
+                return;
+            }
 
             $this->student->update([
                 'content' => $body
