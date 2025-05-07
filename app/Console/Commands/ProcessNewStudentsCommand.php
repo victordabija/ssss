@@ -28,8 +28,13 @@ class ProcessNewStudentsCommand extends Command
      */
     public function handle(): void
     {
+        $count = Student::query()->whereNull('content')->count();
+
+        $this->info("Found $count new students.");;
+
         Student::query()->whereNull('content')->get()->each(function (Student $student) {
             dispatch(new ParseStudentJob($student));
+            $this->info("Dispatched job for student $student->id.");
         });
     }
 }
