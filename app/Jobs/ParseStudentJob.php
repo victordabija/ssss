@@ -39,5 +39,7 @@ class ParseStudentJob implements ShouldQueue
             Log::error("Error while parsing student $this->student->idnp. " . $e->getMessage());
             $this->fail($e);
         }
+
+        dispatch(new ProcessStudentContentJob($this->student));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\ParseStudentJob;
 use App\Jobs\ProcessStudentContentJob;
 use App\Models\Student;
 use App\Services\HtmlParserService;
@@ -47,7 +48,7 @@ class FetchIdentifiersCommand extends Command
 
             $student = Student::create(['idnp' => $identifier]);
 
-            dispatch(new ProcessStudentContentJob($student));
+            dispatch(new ParseStudentJob($student));
 
             $this->info("$count | $identifier | Dispatching job...");;
         }
