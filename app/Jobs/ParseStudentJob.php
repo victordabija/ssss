@@ -3,11 +3,12 @@
 namespace App\Jobs;
 
 use App\Models\Student;
-use App\Services\HtmlParserService;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ParseStudentJob implements ShouldQueue
 {
@@ -27,17 +28,21 @@ class ParseStudentJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(HtmlParserService $parserService): void
+    public function handle(): void
     {
         try {
-            $body = $parserService->getStudentContent($this->student->idnp);
+            $response = Http::asForm()->post('https://api.ceiti.md/date/login', [
+                'idnp' => $this->student->idnp,
+            ]);
+
+            $body = $response->getBody();
 
             $this->student->update([
                 'content' => $body
             ]);
         } catch (ConnectionException $e) {
             Log::error("Error while parsing student $this->student->idnp. " . $e->getMessage());
-            $this->fail($e);
+            $this->fail();
         }
     }
 }
