@@ -13,16 +13,13 @@ class ParseStudentJob implements ShouldQueue
 {
     use Queueable;
 
-    private Student $student;
-
     /**
      * Create a new job instance.
      */
     public function __construct(
-        protected int $studentId,
+        protected Student $student,
     )
     {
-        $this->student = Student::query()->where('id', $this->studentId)->firstOrFail();
     }
 
     /**
@@ -37,7 +34,7 @@ class ParseStudentJob implements ShouldQueue
                 'content' => $body
             ]);
         } catch (ConnectionException $e) {
-            Log::error("Error while parsing student $this->student->idnp. " . $e->getMessage());
+            Log::error("Error while parsing student {$this->student->id}. " . $e->getMessage());
             $this->fail($e);
         }
 
