@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ReportJob;
 use Illuminate\Foundation\Application;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -20,5 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('app:fetch-identifiers')
             ->dailyAt('00:30');
+
+        $schedule->job(new ReportJob())
+            ->dailyAt('08:00');
     })
     ->create();

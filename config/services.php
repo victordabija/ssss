@@ -40,4 +40,10 @@ return [
         'origin' => env('ORIGIN_URL'),
         'student' => env('STUDENT_URL'),
     ],
+
+    'telegram' => [
+        'token' => env('TELEGRAM_BOT_TOKEN'),
+        'chat_id' => env('TELEGRAM_CHAT_ID'),
+        'parse_mode' => 'HTML',
+    ]
 ];
