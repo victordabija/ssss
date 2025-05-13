@@ -17,8 +17,8 @@ class EditStudent extends EditRecord
             Action::make('viewStudentContent')
                 ->label('View Content')
                 ->icon('heroicon-o-document-text')
-                ->url(fn() => route('students.show', $this->record)) // or `url('/orders/' . $this->record->id . '/invoice')`
-                ->openUrlInNewTab(), // optional
+                ->url(fn () => route('students.show', $this->record))
+                ->openUrlInNewTab(),
 
             Actions\DeleteAction::make(),
         ];

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Student;
 use App\Jobs\ParseStudentJob;
+use App\Models\Student;
 use Illuminate\Console\Command;
 
 class ParseCommand extends Command

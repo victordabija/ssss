@@ -4,10 +4,11 @@ namespace App\Jobs;
 
 use App\Models\Student;
 use App\Services\HtmlParserService;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ParseStudentJob implements ShouldQueue
@@ -18,36 +19,37 @@ class ParseStudentJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        protected Student $student,
-    )
-    {
-    }
+        private string $idnp,
+        //        protected Student $student,
+    ) {}
 
     /**
      * Execute the job.
      */
     public function handle(HtmlParserService $parserService): void
     {
+        $student = null;
+
         try {
-            $body = $parserService->getStudentContent($this->student->idnp);
+            $body = $parserService->getStudentContent($this->idnp);
 
             if (Str::contains($body, 'login')) {
-
-                Log::info("Student with IDNP {$this->student->idnp} was deleted because parsing failed.");
-
-                $this->student->delete();
+                Log::info("Couldn't parse student with IDNP {$this->idnp}.");
 
                 return;
             }
 
-            $this->student->update([
-                'content' => $body
+            $student = Student::create([
+                'idnp' => $this->idnp,
+                'content' => $body,
             ]);
         } catch (ConnectionException $e) {
-            Log::error("Error while parsing student {$this->student->id}. " . $e->getMessage());
+            Log::error("Error while parsing student with IDNP {$this->idnp}. ".$e->getMessage());
             $this->fail($e);
         }
 
-        dispatch(new ProcessStudentContentJob($this->student));
+        DB::afterCommit(function () use ($student) {
+            dispatch(new ProcessStudentContentJob($student));
+        });
     }
 }

@@ -2,18 +2,17 @@
 
 namespace App\Services;
 
-use App\Models\Student;
-use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Str;
 use App\Data\StudentParsedData;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
-use Symfony\Component\DomCrawler\Crawler;
+use App\Models\Student;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Symfony\Component\DomCrawler\Crawler;
 
 class HtmlParserService
 {
-
     protected string $origin;
 
     public function __construct()
@@ -25,7 +24,7 @@ class HtmlParserService
 
     public static function make()
     {
-        return (app(self::class))->parse(Student::where('id', '1')->first()->content);
+        return app(self::class)->parse(Student::where('id', '1')->first()->content);
     }
 
     public function parse(string $content): StudentParsedData
@@ -73,7 +72,7 @@ class HtmlParserService
 
             return $identifiers;
         } catch (ConnectionException $e) {
-            Log::error("Error while fetching identifiers" . $e->getMessage());
+            Log::error('Error while fetching identifiers'.$e->getMessage());
             throw $e;
         }
     }

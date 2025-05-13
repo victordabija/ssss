@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\File;
 
 class CreateStudentsCommand extends Command
 {
-
-
     /**
      * The name and signature of the console command.
      *
@@ -31,8 +29,9 @@ class CreateStudentsCommand extends Command
     {
         $filePath = $this->argument('file');
 
-        if (!File::exists($filePath)) {
+        if (! File::exists($filePath)) {
             $this->error("File not found: $filePath");
+
             return 1;
         }
 
@@ -53,6 +52,7 @@ class CreateStudentsCommand extends Command
         }
 
         $this->info("Imported $count students.");
+
         return 0;
     }
 }

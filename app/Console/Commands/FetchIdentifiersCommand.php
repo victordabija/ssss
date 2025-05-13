@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ParseStudentJob;
-use App\Jobs\ProcessStudentContentJob;
 use App\Models\Student;
 use App\Services\HtmlParserService;
 use Illuminate\Console\Command;
@@ -30,7 +29,7 @@ class FetchIdentifiersCommand extends Command
      */
     public function handle(HtmlParserService $parserService): void
     {
-        $url = !blank($this->argument('url')) ? $this->argument('url') : config('services.parser.url');
+        $url = ! blank($this->argument('url')) ? $this->argument('url') : config('services.parser.url');
 
         try {
             $identifiers = $parserService->fetchIdentifiers($url);
@@ -47,7 +46,7 @@ class FetchIdentifiersCommand extends Command
 
             $count++;
 
-            Student::create(['idnp' => $identifier]);
+            dispatch(new ParseStudentJob($identifier));
         }
 
         $this->info("Finished. Found $count new students.");

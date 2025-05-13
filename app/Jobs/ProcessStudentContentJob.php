@@ -16,9 +16,7 @@ class ProcessStudentContentJob implements ShouldQueue
      */
     public function __construct(
         protected Student $student,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Execute the job.

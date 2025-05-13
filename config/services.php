@@ -38,6 +38,6 @@ return [
     'parser' => [
         'url' => env('PARSE_URL'),
         'origin' => env('ORIGIN_URL'),
-        'student' => env('STUDENT_URL')
-    ]
+        'student' => env('STUDENT_URL'),
+    ],
 ];

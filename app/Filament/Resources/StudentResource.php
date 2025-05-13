@@ -3,16 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\StudentResource\Pages;
-use App\Jobs\ProcessStudentContentJob;
 use App\Models\Student;
-use App\Services\HtmlParserService;
-use Filament\Facades\Filament;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -20,9 +14,6 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Filament\Actions\Action;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Date;
 
 class StudentResource extends Resource
 {
@@ -43,7 +34,7 @@ class StudentResource extends Resource
                     ->required(),
                 Textarea::make('content')
                     ->columnSpanFull()
-                    ->rows(20)
+                    ->rows(20),
             ])->columns(3);
     }
 
@@ -61,9 +52,9 @@ class StudentResource extends Resource
             ->filters([
                 Filter::make('name')
                     ->form([
-                        TextInput::make('name')
+                        TextInput::make('name'),
                     ])
-                    ->query(fn($query, array $data) => $query->when($data['name'] ?? '', fn($q, $name) => $q->where('name', 'like', '%' . $name . '%'))),
+                    ->query(fn ($query, array $data) => $query->when($data['name'] ?? '', fn ($q, $name) => $q->where('name', 'like', '%'.$name.'%'))),
                 SelectFilter::make('studyYear')
                     ->options([1 => 1, 2 => 2, 3 => 3, 4 => 4]),
                 SelectFilter::make('speciality')
@@ -86,13 +77,13 @@ class StudentResource extends Resource
                             ->distinct()
                             ->pluck('group', 'group')
                             ->toArray()
-                    )
+                    ),
             ], layout: FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\Action::make('viewDetails')
                     ->label('View Content')
                     ->icon('heroicon-o-document-text')
-                    ->url(fn($record) => route('students.show', $record))
+                    ->url(fn ($record) => route('students.show', $record))
                     ->openUrlInNewTab(), // optional
                 Tables\Actions\EditAction::make(),
             ])

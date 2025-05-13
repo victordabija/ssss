@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ParseStudentJob;
-use App\Jobs\ProcessStudentContentJob;
 use App\Models\Student;
 use Illuminate\Console\Command;
 
@@ -30,7 +29,7 @@ class ProcessNewStudentsCommand extends Command
     {
         $count = Student::query()->whereNull('content')->count();
 
-        $this->info("Found $count new students.");;
+        $this->info("Found $count new students.");
 
         Student::query()->whereNull('content')->get()->each(function (Student $student) {
             dispatch(new ParseStudentJob($student));
