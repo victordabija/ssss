@@ -35,16 +35,15 @@ class TelegramNotifier
 
     public function send(string $message): void
     {
-        Log::info('[TELEGRAM]', [
-            'message' => $message,
-            'escaped' => $this->escape($message),
-        ]);
-
-        Http::post('https://api.telegram.org/bot' . $this->token . '/sendMessage', [
+        $response = Http::post('https://api.telegram.org/bot' . $this->token . '/sendMessage', [
             'chat_id' => $this->chatId,
             'text' => $this->escape($message),
             'parse_mode' => $this->parseMode
         ]);
+
+        if ($response->failed()) {
+            Log::error("Telegram notifier failed to send message: {$response->body()}");
+        }
     }
 
     private function escape(string $text): string

@@ -22,12 +22,8 @@ class ReportService
 
     public function report(): void
     {
-        $students = Student::query()
-            ->where('created_at', '>', Carbon::yesterday())
-            ->get();
-
         $this->telegramNotifier->send(
-            $this->generateMessage($students)
+            $this->generateMessage(Student::recent()->get())
         );
     }
 
